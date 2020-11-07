@@ -1,0 +1,6 @@
+lupe.exe
+.vscode
+lupe.cpp
+lupe.tab.c
+lupe.tab.h
+lex.yy.c

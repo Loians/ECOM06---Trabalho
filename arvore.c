@@ -207,6 +207,8 @@ void insereLista(char *nome)
         exit(1);
     }
     listaVars *novo = (listaVars *)malloc(sizeof(listaVars));
+    strcpy(novo->nome, nome);
+    novo->prox = NULL;
     if (ant == NULL)
     {
         prim = novo;
@@ -215,8 +217,6 @@ void insereLista(char *nome)
     {
         ant->prox = novo;
     }
-    strcpy(novo->nome, nome);
-    novo->prox = NULL;
 }
 
 int buscaLista(char *nome)
