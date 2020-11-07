@@ -19,9 +19,12 @@ begin
     }else{
         c = 2;
     }
-    for(a;0;a<10;1){
-            b = b + 2;
-            lpout(b);
+    for(a=3;a<10;a = a+1){
+        b = b + 2;
+        lpout(b);
+        for(c = 0; c<5 ; c = c + 1){
+            lpout(c*a);
+        }
     }
     while(c>0){
         lpout(c);

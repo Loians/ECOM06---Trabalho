@@ -6,6 +6,7 @@ Terminais sem uso na gramática
     EXPSUB
     NOVAVAR
     ATRIBUIR
+    ATRIBUIRFIM
     NOTVAR
     OPCOMP
     OPLOGICA
@@ -13,16 +14,16 @@ Terminais sem uso na gramática
 
 Estado 1 conflitos: 9 de deslocamento/redução
 Estado 13 conflitos: 10 de deslocamento/redução
-Estado 55 conflitos: 9 de deslocamento/redução
-Estado 57 conflitos: 4 de deslocamento/redução
-Estado 81 conflitos: 10 de deslocamento/redução
-Estado 85 conflitos: 4 de deslocamento/redução
-Estado 89 conflitos: 9 de deslocamento/redução
+Estado 57 conflitos: 9 de deslocamento/redução
+Estado 59 conflitos: 4 de deslocamento/redução
+Estado 83 conflitos: 10 de deslocamento/redução
+Estado 86 conflitos: 4 de deslocamento/redução
 Estado 90 conflitos: 9 de deslocamento/redução
-Estado 95 conflitos: 10 de deslocamento/redução
+Estado 91 conflitos: 9 de deslocamento/redução
 Estado 96 conflitos: 10 de deslocamento/redução
-Estado 105 conflitos: 9 de deslocamento/redução
-Estado 106 conflitos: 10 de deslocamento/redução
+Estado 97 conflitos: 10 de deslocamento/redução
+Estado 102 conflitos: 9 de deslocamento/redução
+Estado 103 conflitos: 10 de deslocamento/redução
 
 
 Gramática
@@ -31,7 +32,7 @@ Gramática
 
     1 inicio: INICIOPROG sentencas FIMPROG
 
-    2 sentenca: atribuir
+    2 sentenca: atribuirfim
     3         | novavar
     4         | escrever
     5         | ler
@@ -71,41 +72,41 @@ Gramática
 
    31 $@1: %empty
 
-   32 atribuir: VARIAVEL $@1 ATRIBUICAO expressaoA PTVIRGULA
+   32 atribuir: VARIAVEL $@1 ATRIBUICAO expressaoA
 
-   33 escrever: SAIDA ABREP expressaoA FECHAP PTVIRGULA
+   33 atribuirfim: atribuir PTVIRGULA
 
-   34 ler: ENTRADA ABREP VARIAVEL FECHAP PTVIRGULA
+   34 escrever: SAIDA ABREP expressaoA FECHAP PTVIRGULA
 
-   35 operadorL: AND
-   36          | OR
+   35 ler: ENTRADA ABREP VARIAVEL FECHAP PTVIRGULA
 
-   37 varlogica: NOT expressaoA
-   38          | expressaoA
+   36 operadorL: AND
+   37          | OR
 
-   39 relacional: IGUAL
-   40           | MAIORIGUAL
-   41           | MENORIGUAL
-   42           | MAIOR
-   43           | MENOR
-   44           | DIFERENTE
+   38 varlogica: NOT expressaoA
+   39          | expressaoA
 
-   45 opcomp: expressaoA relacional expressaoA
+   40 relacional: IGUAL
+   41           | MAIORIGUAL
+   42           | MENORIGUAL
+   43           | MAIOR
+   44           | MENOR
+   45           | DIFERENTE
 
-   46 oplogica: varlogica operadorL varlogica
+   46 opcomp: expressaoA relacional expressaoA
 
-   47 opLogicas: oplogica
-   48          | opcomp
-   49          | varlogica
+   47 oplogica: varlogica operadorL varlogica
 
-   50 condif: IF ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
+   48 opLogicas: oplogica
+   49          | opcomp
+   50          | varlogica
 
-   51 condifelse: condif
-   52           | condif ELSE INICIOBLOCO sentencas FIMBLOCO
+   51 condif: IF ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-   53 $@2: %empty
+   52 condifelse: condif
+   53           | condif ELSE INICIOBLOCO sentencas FIMBLOCO
 
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO
 
    55 loopwhile: WHILE ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
 
@@ -114,7 +115,7 @@ Terminais, com as regras onde eles aparecem
 
     $end (0) 0
     error (256)
-    VARIAVEL (258) 12 30 32 34 54
+    VARIAVEL (258) 12 30 32 35
     INT (259) 13
     CHAR (260) 14
     REAL (261) 15
@@ -124,119 +125,120 @@ Terminais, com as regras onde eles aparecem
     MULTI (265) 20
     DIVI (266) 21
     MOD (267) 17
-    AND (268) 35
-    OR (269) 36
-    NOT (270) 37
-    IGUAL (271) 39
-    MAIORIGUAL (272) 40
-    MENORIGUAL (273) 41
-    MAIOR (274) 42
-    MENOR (275) 43
-    DIFERENTE (276) 44
+    AND (268) 36
+    OR (269) 37
+    NOT (270) 38
+    IGUAL (271) 40
+    MAIORIGUAL (272) 41
+    MENORIGUAL (273) 42
+    MAIOR (274) 43
+    MENOR (275) 44
+    DIFERENTE (276) 45
     VIRGULA (277)
-    PTVIRGULA (278) 30 32 33 34 54
-    ABREP (279) 22 33 34 50 54 55
-    FECHAP (280) 22 33 34 50 54 55
-    INICIOBLOCO (281) 50 52 54 55
-    FIMBLOCO (282) 50 52 54 55
+    PTVIRGULA (278) 30 33 34 35 54
+    ABREP (279) 22 34 35 51 54 55
+    FECHAP (280) 22 34 35 51 54 55
+    INICIOBLOCO (281) 51 53 54 55
+    FIMBLOCO (282) 51 53 54 55
     INICIOPROG (283) 1
     FIMPROG (284) 1
     T_INT (285) 27
     T_CHAR (286) 28
     T_REAL (287) 29
-    IF (288) 50
-    ELSE (289) 52
+    IF (288) 51
+    ELSE (289) 53
     WHILE (290) 55
     FOR (291) 54
-    ENTRADA (292) 34
-    SAIDA (293) 33
+    ENTRADA (292) 35
+    SAIDA (293) 34
     EXPPARS (294)
     EXPOPS (295)
     EXPSUB (296)
     NOVAVAR (297)
     ATRIBUIR (298)
-    NOTVAR (299)
-    OPCOMP (300)
-    OPLOGICA (301)
+    ATRIBUIRFIM (299)
+    NOTVAR (300)
+    OPCOMP (301)
+    OPLOGICA (302)
 
 
 Não terminais com as regras onde eles aparecem
 
-    $accept (47)
+    $accept (48)
         à esquerda: 0
-    inicio (48)
+    inicio (49)
         à esquerda: 1
         à direita: 0
-    sentenca <nos> (49)
+    sentenca <nos> (50)
         à esquerda: 2 3 4 5 6 7 8 9
         à direita: 10 11
-    sentencas <nos> (50)
+    sentencas <nos> (51)
         à esquerda: 10 11
-        à direita: 1 11 50 52 54 55
-    varint <nos> (51)
+        à direita: 1 11 51 53 54 55
+    varint <nos> (52)
         à esquerda: 12 13
         à direita: 16 17
-    valor <nos> (52)
+    valor <nos> (53)
         à esquerda: 14 15 16
         à direita: 25
-    opmod <nos> (53)
+    opmod <nos> (54)
         à esquerda: 17
         à direita: 26
-    operacoes <tipoint> (54)
+    operacoes <tipoint> (55)
         à esquerda: 18 19 20 21
         à direita: 23
-    expressaoA <nos> (55)
+    expressaoA <nos> (56)
         à esquerda: 22 23 24 25 26
-        à direita: 22 23 24 32 33 37 38 45 54
-    tipos <tipoint> (56)
+        à direita: 22 23 24 32 34 38 39 46
+    tipos <tipoint> (57)
         à esquerda: 27 28 29
         à direita: 30
-    novavar <nos> (57)
+    novavar <nos> (58)
         à esquerda: 30
         à direita: 3
-    atribuir <nos> (58)
+    atribuir <nos> (59)
         à esquerda: 32
-        à direita: 2
-    $@1 (59)
+        à direita: 33 54
+    $@1 (60)
         à esquerda: 31
         à direita: 32
-    escrever <nos> (60)
+    atribuirfim <nos> (61)
         à esquerda: 33
-        à direita: 4
-    ler <nos> (61)
+        à direita: 2 54
+    escrever <nos> (62)
         à esquerda: 34
+        à direita: 4
+    ler <nos> (63)
+        à esquerda: 35
         à direita: 5
-    operadorL <tipoint> (62)
-        à esquerda: 35 36
-        à direita: 46
-    varlogica <nos> (63)
-        à esquerda: 37 38
-        à direita: 46 49
-    relacional <tipoint> (64)
-        à esquerda: 39 40 41 42 43 44
-        à direita: 45
-    opcomp <nos> (65)
-        à esquerda: 45
-        à direita: 48
-    oplogica <nos> (66)
-        à esquerda: 46
+    operadorL <tipoint> (64)
+        à esquerda: 36 37
         à direita: 47
-    opLogicas <nos> (67)
-        à esquerda: 47 48 49
-        à direita: 50 54 55
-    condif <nos> (68)
-        à esquerda: 50
-        à direita: 51 52
-    condifelse <nos> (69)
-        à esquerda: 51 52
+    varlogica <nos> (65)
+        à esquerda: 38 39
+        à direita: 47 50
+    relacional <tipoint> (66)
+        à esquerda: 40 41 42 43 44 45
+        à direita: 46
+    opcomp <nos> (67)
+        à esquerda: 46
+        à direita: 49
+    oplogica <nos> (68)
+        à esquerda: 47
+        à direita: 48
+    opLogicas <nos> (69)
+        à esquerda: 48 49 50
+        à direita: 51 54 55
+    condif <nos> (70)
+        à esquerda: 51
+        à direita: 52 53
+    condifelse <nos> (71)
+        à esquerda: 52 53
         à direita: 8
-    loopfor <nos> (70)
+    loopfor <nos> (72)
         à esquerda: 54
         à direita: 6
-    $@2 (71)
-        à esquerda: 53
-        à direita: 54
-    loopwhile <nos> (72)
+    loopwhile <nos> (73)
         à esquerda: 55
         à direita: 7
 
@@ -275,33 +277,34 @@ Estado 1
     SAIDA     [reduzir usando a regra 9 (sentenca)]
     $padrão  reduzir usando a regra 9 (sentenca)
 
-    sentenca    ir ao estado 12
-    sentencas   ir ao estado 13
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 12
+    sentencas    ir ao estado 13
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
 Estado 2
 
     0 $accept: inicio . $end
 
-    $end  deslocar, e ir ao estado 23
+    $end  deslocar, e ir ao estado 24
 
 
 Estado 3
 
-   32 atribuir: VARIAVEL . $@1 ATRIBUICAO expressaoA PTVIRGULA
+   32 atribuir: VARIAVEL . $@1 ATRIBUICAO expressaoA
 
     $padrão  reduzir usando a regra 31 ($@1)
 
-    $@1  ir ao estado 24
+    $@1  ir ao estado 25
 
 
 Estado 4
@@ -327,37 +330,37 @@ Estado 6
 
 Estado 7
 
-   50 condif: IF . ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
+   51 condif: IF . ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    ABREP  deslocar, e ir ao estado 25
+    ABREP  deslocar, e ir ao estado 26
 
 
 Estado 8
 
    55 loopwhile: WHILE . ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    ABREP  deslocar, e ir ao estado 26
+    ABREP  deslocar, e ir ao estado 27
 
 
 Estado 9
 
-   54 loopfor: FOR . ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
-
-    ABREP  deslocar, e ir ao estado 27
-
-
-Estado 10
-
-   34 ler: ENTRADA . ABREP VARIAVEL FECHAP PTVIRGULA
+   54 loopfor: FOR . ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO
 
     ABREP  deslocar, e ir ao estado 28
 
 
-Estado 11
+Estado 10
 
-   33 escrever: SAIDA . ABREP expressaoA FECHAP PTVIRGULA
+   35 ler: ENTRADA . ABREP VARIAVEL FECHAP PTVIRGULA
 
     ABREP  deslocar, e ir ao estado 29
+
+
+Estado 11
+
+   34 escrever: SAIDA . ABREP expressaoA FECHAP PTVIRGULA
+
+    ABREP  deslocar, e ir ao estado 30
 
 
 Estado 12
@@ -373,7 +376,7 @@ Estado 13
    11 sentencas: sentencas . sentenca
 
     VARIAVEL  deslocar, e ir ao estado 3
-    FIMPROG   deslocar, e ir ao estado 30
+    FIMPROG   deslocar, e ir ao estado 31
     T_INT     deslocar, e ir ao estado 4
     T_CHAR    deslocar, e ir ao estado 5
     T_REAL    deslocar, e ir ao estado 6
@@ -394,23 +397,24 @@ Estado 13
     ENTRADA   [reduzir usando a regra 9 (sentenca)]
     SAIDA     [reduzir usando a regra 9 (sentenca)]
 
-    sentenca    ir ao estado 31
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 32
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
 Estado 14
 
    30 novavar: tipos . VARIAVEL PTVIRGULA
 
-    VARIAVEL  deslocar, e ir ao estado 32
+    VARIAVEL  deslocar, e ir ao estado 33
 
 
 Estado 15
@@ -422,397 +426,427 @@ Estado 15
 
 Estado 16
 
-    2 sentenca: atribuir .
+   33 atribuirfim: atribuir . PTVIRGULA
+
+    PTVIRGULA  deslocar, e ir ao estado 34
+
+
+Estado 17
+
+    2 sentenca: atribuirfim .
 
     $padrão  reduzir usando a regra 2 (sentenca)
 
 
-Estado 17
+Estado 18
 
     4 sentenca: escrever .
 
     $padrão  reduzir usando a regra 4 (sentenca)
 
 
-Estado 18
+Estado 19
 
     5 sentenca: ler .
 
     $padrão  reduzir usando a regra 5 (sentenca)
 
 
-Estado 19
-
-   51 condifelse: condif .
-   52           | condif . ELSE INICIOBLOCO sentencas FIMBLOCO
-
-    ELSE  deslocar, e ir ao estado 33
-
-    $padrão  reduzir usando a regra 51 (condifelse)
-
-
 Estado 20
+
+   52 condifelse: condif .
+   53           | condif . ELSE INICIOBLOCO sentencas FIMBLOCO
+
+    ELSE  deslocar, e ir ao estado 35
+
+    $padrão  reduzir usando a regra 52 (condifelse)
+
+
+Estado 21
 
     8 sentenca: condifelse .
 
     $padrão  reduzir usando a regra 8 (sentenca)
 
 
-Estado 21
+Estado 22
 
     6 sentenca: loopfor .
 
     $padrão  reduzir usando a regra 6 (sentenca)
 
 
-Estado 22
+Estado 23
 
     7 sentenca: loopwhile .
 
     $padrão  reduzir usando a regra 7 (sentenca)
 
 
-Estado 23
+Estado 24
 
     0 $accept: inicio $end .
 
     $padrão  aceitar
 
 
-Estado 24
-
-   32 atribuir: VARIAVEL $@1 . ATRIBUICAO expressaoA PTVIRGULA
-
-    ATRIBUICAO  deslocar, e ir ao estado 34
-
-
 Estado 25
 
-   50 condif: IF ABREP . opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
+   32 atribuir: VARIAVEL $@1 . ATRIBUICAO expressaoA
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    NOT       deslocar, e ir ao estado 40
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 45
-    varlogica   ir ao estado 46
-    opcomp      ir ao estado 47
-    oplogica    ir ao estado 48
-    opLogicas   ir ao estado 49
+    ATRIBUICAO  deslocar, e ir ao estado 36
 
 
 Estado 26
 
-   55 loopwhile: WHILE ABREP . opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
+   51 condif: IF ABREP . opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    NOT       deslocar, e ir ao estado 40
-    ABREP     deslocar, e ir ao estado 41
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    NOT       deslocar, e ir ao estado 42
+    ABREP     deslocar, e ir ao estado 43
 
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 45
-    varlogica   ir ao estado 46
-    opcomp      ir ao estado 47
-    oplogica    ir ao estado 48
-    opLogicas   ir ao estado 50
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 47
+    varlogica   ir ao estado 48
+    opcomp      ir ao estado 49
+    oplogica    ir ao estado 50
+    opLogicas   ir ao estado 51
 
 
 Estado 27
 
-   54 loopfor: FOR ABREP . VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
+   55 loopwhile: WHILE ABREP . opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    VARIAVEL  deslocar, e ir ao estado 51
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    NOT       deslocar, e ir ao estado 42
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 47
+    varlogica   ir ao estado 48
+    opcomp      ir ao estado 49
+    oplogica    ir ao estado 50
+    opLogicas   ir ao estado 52
 
 
 Estado 28
 
-   34 ler: ENTRADA ABREP . VARIAVEL FECHAP PTVIRGULA
+   54 loopfor: FOR ABREP . atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    VARIAVEL  deslocar, e ir ao estado 52
+    VARIAVEL  deslocar, e ir ao estado 3
+
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 53
 
 
 Estado 29
 
-   33 escrever: SAIDA ABREP . expressaoA FECHAP PTVIRGULA
+   35 ler: ENTRADA ABREP . VARIAVEL FECHAP PTVIRGULA
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 53
+    VARIAVEL  deslocar, e ir ao estado 54
 
 
 Estado 30
+
+   34 escrever: SAIDA ABREP . expressaoA FECHAP PTVIRGULA
+
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 55
+
+
+Estado 31
 
     1 inicio: INICIOPROG sentencas FIMPROG .
 
     $padrão  reduzir usando a regra 1 (inicio)
 
 
-Estado 31
+Estado 32
 
    11 sentencas: sentencas sentenca .
 
     $padrão  reduzir usando a regra 11 (sentencas)
 
 
-Estado 32
+Estado 33
 
    30 novavar: tipos VARIAVEL . PTVIRGULA
 
-    PTVIRGULA  deslocar, e ir ao estado 54
-
-
-Estado 33
-
-   52 condifelse: condif ELSE . INICIOBLOCO sentencas FIMBLOCO
-
-    INICIOBLOCO  deslocar, e ir ao estado 55
+    PTVIRGULA  deslocar, e ir ao estado 56
 
 
 Estado 34
 
-   32 atribuir: VARIAVEL $@1 ATRIBUICAO . expressaoA PTVIRGULA
+   33 atribuirfim: atribuir PTVIRGULA .
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 56
+    $padrão  reduzir usando a regra 33 (atribuirfim)
 
 
 Estado 35
+
+   53 condifelse: condif ELSE . INICIOBLOCO sentencas FIMBLOCO
+
+    INICIOBLOCO  deslocar, e ir ao estado 57
+
+
+Estado 36
+
+   32 atribuir: VARIAVEL $@1 ATRIBUICAO . expressaoA
+
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 58
+
+
+Estado 37
 
    12 varint: VARIAVEL .
 
     $padrão  reduzir usando a regra 12 (varint)
 
 
-Estado 36
+Estado 38
 
    13 varint: INT .
 
     $padrão  reduzir usando a regra 13 (varint)
 
 
-Estado 37
+Estado 39
 
    14 valor: CHAR .
 
     $padrão  reduzir usando a regra 14 (valor)
 
 
-Estado 38
+Estado 40
 
    15 valor: REAL .
 
     $padrão  reduzir usando a regra 15 (valor)
 
 
-Estado 39
+Estado 41
 
    24 expressaoA: SUB . expressaoA
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
 
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 57
-
-
-Estado 40
-
-   37 varlogica: NOT . expressaoA
-
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 58
-
-
-Estado 41
-
-   22 expressaoA: ABREP . expressaoA FECHAP
-
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
     expressaoA  ir ao estado 59
 
 
 Estado 42
 
+   38 varlogica: NOT . expressaoA
+
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 60
+
+
+Estado 43
+
+   22 expressaoA: ABREP . expressaoA FECHAP
+
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 61
+
+
+Estado 44
+
    16 valor: varint .
    17 opmod: varint . MOD varint
 
-    MOD  deslocar, e ir ao estado 60
+    MOD  deslocar, e ir ao estado 62
 
     $padrão  reduzir usando a regra 16 (valor)
 
 
-Estado 43
+Estado 45
 
    25 expressaoA: valor .
 
     $padrão  reduzir usando a regra 25 (expressaoA)
 
 
-Estado 44
+Estado 46
 
    26 expressaoA: opmod .
 
     $padrão  reduzir usando a regra 26 (expressaoA)
 
 
-Estado 45
-
-   23 expressaoA: expressaoA . operacoes expressaoA
-   38 varlogica: expressaoA .
-   45 opcomp: expressaoA . relacional expressaoA
-
-    SOMA        deslocar, e ir ao estado 61
-    SUB         deslocar, e ir ao estado 62
-    MULTI       deslocar, e ir ao estado 63
-    DIVI        deslocar, e ir ao estado 64
-    IGUAL       deslocar, e ir ao estado 65
-    MAIORIGUAL  deslocar, e ir ao estado 66
-    MENORIGUAL  deslocar, e ir ao estado 67
-    MAIOR       deslocar, e ir ao estado 68
-    MENOR       deslocar, e ir ao estado 69
-    DIFERENTE   deslocar, e ir ao estado 70
-
-    $padrão  reduzir usando a regra 38 (varlogica)
-
-    operacoes   ir ao estado 71
-    relacional  ir ao estado 72
-
-
-Estado 46
-
-   46 oplogica: varlogica . operadorL varlogica
-   49 opLogicas: varlogica .
-
-    AND  deslocar, e ir ao estado 73
-    OR   deslocar, e ir ao estado 74
-
-    $padrão  reduzir usando a regra 49 (opLogicas)
-
-    operadorL  ir ao estado 75
-
-
 Estado 47
 
-   48 opLogicas: opcomp .
+   23 expressaoA: expressaoA . operacoes expressaoA
+   39 varlogica: expressaoA .
+   46 opcomp: expressaoA . relacional expressaoA
 
-    $padrão  reduzir usando a regra 48 (opLogicas)
+    SOMA        deslocar, e ir ao estado 63
+    SUB         deslocar, e ir ao estado 64
+    MULTI       deslocar, e ir ao estado 65
+    DIVI        deslocar, e ir ao estado 66
+    IGUAL       deslocar, e ir ao estado 67
+    MAIORIGUAL  deslocar, e ir ao estado 68
+    MENORIGUAL  deslocar, e ir ao estado 69
+    MAIOR       deslocar, e ir ao estado 70
+    MENOR       deslocar, e ir ao estado 71
+    DIFERENTE   deslocar, e ir ao estado 72
+
+    $padrão  reduzir usando a regra 39 (varlogica)
+
+    operacoes   ir ao estado 73
+    relacional  ir ao estado 74
 
 
 Estado 48
 
-   47 opLogicas: oplogica .
+   47 oplogica: varlogica . operadorL varlogica
+   50 opLogicas: varlogica .
 
-    $padrão  reduzir usando a regra 47 (opLogicas)
+    AND  deslocar, e ir ao estado 75
+    OR   deslocar, e ir ao estado 76
+
+    $padrão  reduzir usando a regra 50 (opLogicas)
+
+    operadorL  ir ao estado 77
 
 
 Estado 49
 
-   50 condif: IF ABREP opLogicas . FECHAP INICIOBLOCO sentencas FIMBLOCO
+   49 opLogicas: opcomp .
 
-    FECHAP  deslocar, e ir ao estado 76
+    $padrão  reduzir usando a regra 49 (opLogicas)
 
 
 Estado 50
 
-   55 loopwhile: WHILE ABREP opLogicas . FECHAP INICIOBLOCO sentencas FIMBLOCO
+   48 opLogicas: oplogica .
 
-    FECHAP  deslocar, e ir ao estado 77
+    $padrão  reduzir usando a regra 48 (opLogicas)
 
 
 Estado 51
 
-   54 loopfor: FOR ABREP VARIAVEL . $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
+   51 condif: IF ABREP opLogicas . FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    $padrão  reduzir usando a regra 53 ($@2)
-
-    $@2  ir ao estado 78
+    FECHAP  deslocar, e ir ao estado 78
 
 
 Estado 52
 
-   34 ler: ENTRADA ABREP VARIAVEL . FECHAP PTVIRGULA
+   55 loopwhile: WHILE ABREP opLogicas . FECHAP INICIOBLOCO sentencas FIMBLOCO
 
     FECHAP  deslocar, e ir ao estado 79
 
 
 Estado 53
 
-   23 expressaoA: expressaoA . operacoes expressaoA
-   33 escrever: SAIDA ABREP expressaoA . FECHAP PTVIRGULA
+   54 loopfor: FOR ABREP atribuirfim . opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    SOMA    deslocar, e ir ao estado 61
-    SUB     deslocar, e ir ao estado 62
-    MULTI   deslocar, e ir ao estado 63
-    DIVI    deslocar, e ir ao estado 64
-    FECHAP  deslocar, e ir ao estado 80
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    NOT       deslocar, e ir ao estado 42
+    ABREP     deslocar, e ir ao estado 43
 
-    operacoes  ir ao estado 71
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 47
+    varlogica   ir ao estado 48
+    opcomp      ir ao estado 49
+    oplogica    ir ao estado 50
+    opLogicas   ir ao estado 80
 
 
 Estado 54
+
+   35 ler: ENTRADA ABREP VARIAVEL . FECHAP PTVIRGULA
+
+    FECHAP  deslocar, e ir ao estado 81
+
+
+Estado 55
+
+   23 expressaoA: expressaoA . operacoes expressaoA
+   34 escrever: SAIDA ABREP expressaoA . FECHAP PTVIRGULA
+
+    SOMA    deslocar, e ir ao estado 63
+    SUB     deslocar, e ir ao estado 64
+    MULTI   deslocar, e ir ao estado 65
+    DIVI    deslocar, e ir ao estado 66
+    FECHAP  deslocar, e ir ao estado 82
+
+    operacoes  ir ao estado 73
+
+
+Estado 56
 
    30 novavar: tipos VARIAVEL PTVIRGULA .
 
     $padrão  reduzir usando a regra 30 (novavar)
 
 
-Estado 55
+Estado 57
 
-   52 condifelse: condif ELSE INICIOBLOCO . sentencas FIMBLOCO
+   53 condifelse: condif ELSE INICIOBLOCO . sentencas FIMBLOCO
 
     VARIAVEL  deslocar, e ir ao estado 3
     T_INT     deslocar, e ir ao estado 4
@@ -835,42 +869,44 @@ Estado 55
     SAIDA     [reduzir usando a regra 9 (sentenca)]
     $padrão  reduzir usando a regra 9 (sentenca)
 
-    sentenca    ir ao estado 12
-    sentencas   ir ao estado 81
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 12
+    sentencas    ir ao estado 83
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
-Estado 56
+Estado 58
 
    23 expressaoA: expressaoA . operacoes expressaoA
-   32 atribuir: VARIAVEL $@1 ATRIBUICAO expressaoA . PTVIRGULA
+   32 atribuir: VARIAVEL $@1 ATRIBUICAO expressaoA .
 
-    SOMA       deslocar, e ir ao estado 61
-    SUB        deslocar, e ir ao estado 62
-    MULTI      deslocar, e ir ao estado 63
-    DIVI       deslocar, e ir ao estado 64
-    PTVIRGULA  deslocar, e ir ao estado 82
+    SOMA   deslocar, e ir ao estado 63
+    SUB    deslocar, e ir ao estado 64
+    MULTI  deslocar, e ir ao estado 65
+    DIVI   deslocar, e ir ao estado 66
 
-    operacoes  ir ao estado 71
+    $padrão  reduzir usando a regra 32 (atribuir)
+
+    operacoes  ir ao estado 73
 
 
-Estado 57
+Estado 59
 
    23 expressaoA: expressaoA . operacoes expressaoA
    24           | SUB expressaoA .
 
-    SOMA   deslocar, e ir ao estado 61
-    SUB    deslocar, e ir ao estado 62
-    MULTI  deslocar, e ir ao estado 63
-    DIVI   deslocar, e ir ao estado 64
+    SOMA   deslocar, e ir ao estado 63
+    SUB    deslocar, e ir ao estado 64
+    MULTI  deslocar, e ir ao estado 65
+    DIVI   deslocar, e ir ao estado 66
 
     SOMA      [reduzir usando a regra 24 (expressaoA)]
     SUB       [reduzir usando a regra 24 (expressaoA)]
@@ -878,227 +914,227 @@ Estado 57
     DIVI      [reduzir usando a regra 24 (expressaoA)]
     $padrão  reduzir usando a regra 24 (expressaoA)
 
-    operacoes  ir ao estado 71
-
-
-Estado 58
-
-   23 expressaoA: expressaoA . operacoes expressaoA
-   37 varlogica: NOT expressaoA .
-
-    SOMA   deslocar, e ir ao estado 61
-    SUB    deslocar, e ir ao estado 62
-    MULTI  deslocar, e ir ao estado 63
-    DIVI   deslocar, e ir ao estado 64
-
-    $padrão  reduzir usando a regra 37 (varlogica)
-
-    operacoes  ir ao estado 71
-
-
-Estado 59
-
-   22 expressaoA: ABREP expressaoA . FECHAP
-   23           | expressaoA . operacoes expressaoA
-
-    SOMA    deslocar, e ir ao estado 61
-    SUB     deslocar, e ir ao estado 62
-    MULTI   deslocar, e ir ao estado 63
-    DIVI    deslocar, e ir ao estado 64
-    FECHAP  deslocar, e ir ao estado 83
-
-    operacoes  ir ao estado 71
+    operacoes  ir ao estado 73
 
 
 Estado 60
 
-   17 opmod: varint MOD . varint
+   23 expressaoA: expressaoA . operacoes expressaoA
+   38 varlogica: NOT expressaoA .
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
+    SOMA   deslocar, e ir ao estado 63
+    SUB    deslocar, e ir ao estado 64
+    MULTI  deslocar, e ir ao estado 65
+    DIVI   deslocar, e ir ao estado 66
 
-    varint  ir ao estado 84
+    $padrão  reduzir usando a regra 38 (varlogica)
+
+    operacoes  ir ao estado 73
 
 
 Estado 61
+
+   22 expressaoA: ABREP expressaoA . FECHAP
+   23           | expressaoA . operacoes expressaoA
+
+    SOMA    deslocar, e ir ao estado 63
+    SUB     deslocar, e ir ao estado 64
+    MULTI   deslocar, e ir ao estado 65
+    DIVI    deslocar, e ir ao estado 66
+    FECHAP  deslocar, e ir ao estado 84
+
+    operacoes  ir ao estado 73
+
+
+Estado 62
+
+   17 opmod: varint MOD . varint
+
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+
+    varint  ir ao estado 85
+
+
+Estado 63
 
    18 operacoes: SOMA .
 
     $padrão  reduzir usando a regra 18 (operacoes)
 
 
-Estado 62
+Estado 64
 
    19 operacoes: SUB .
 
     $padrão  reduzir usando a regra 19 (operacoes)
 
 
-Estado 63
+Estado 65
 
    20 operacoes: MULTI .
 
     $padrão  reduzir usando a regra 20 (operacoes)
 
 
-Estado 64
+Estado 66
 
    21 operacoes: DIVI .
 
     $padrão  reduzir usando a regra 21 (operacoes)
 
 
-Estado 65
+Estado 67
 
-   39 relacional: IGUAL .
-
-    $padrão  reduzir usando a regra 39 (relacional)
-
-
-Estado 66
-
-   40 relacional: MAIORIGUAL .
+   40 relacional: IGUAL .
 
     $padrão  reduzir usando a regra 40 (relacional)
 
 
-Estado 67
+Estado 68
 
-   41 relacional: MENORIGUAL .
+   41 relacional: MAIORIGUAL .
 
     $padrão  reduzir usando a regra 41 (relacional)
 
 
-Estado 68
+Estado 69
 
-   42 relacional: MAIOR .
+   42 relacional: MENORIGUAL .
 
     $padrão  reduzir usando a regra 42 (relacional)
 
 
-Estado 69
+Estado 70
 
-   43 relacional: MENOR .
+   43 relacional: MAIOR .
 
     $padrão  reduzir usando a regra 43 (relacional)
 
 
-Estado 70
+Estado 71
 
-   44 relacional: DIFERENTE .
+   44 relacional: MENOR .
 
     $padrão  reduzir usando a regra 44 (relacional)
 
 
-Estado 71
-
-   23 expressaoA: expressaoA operacoes . expressaoA
-
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 85
-
-
 Estado 72
 
-   45 opcomp: expressaoA relacional . expressaoA
+   45 relacional: DIFERENTE .
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 86
+    $padrão  reduzir usando a regra 45 (relacional)
 
 
 Estado 73
 
-   35 operadorL: AND .
+   23 expressaoA: expressaoA operacoes . expressaoA
 
-    $padrão  reduzir usando a regra 35 (operadorL)
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 86
 
 
 Estado 74
 
-   36 operadorL: OR .
+   46 opcomp: expressaoA relacional . expressaoA
 
-    $padrão  reduzir usando a regra 36 (operadorL)
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 87
 
 
 Estado 75
 
-   46 oplogica: varlogica operadorL . varlogica
+   36 operadorL: AND .
 
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    NOT       deslocar, e ir ao estado 40
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 87
-    varlogica   ir ao estado 88
+    $padrão  reduzir usando a regra 36 (operadorL)
 
 
 Estado 76
 
-   50 condif: IF ABREP opLogicas FECHAP . INICIOBLOCO sentencas FIMBLOCO
+   37 operadorL: OR .
 
-    INICIOBLOCO  deslocar, e ir ao estado 89
+    $padrão  reduzir usando a regra 37 (operadorL)
 
 
 Estado 77
 
-   55 loopwhile: WHILE ABREP opLogicas FECHAP . INICIOBLOCO sentencas FIMBLOCO
+   47 oplogica: varlogica operadorL . varlogica
 
-    INICIOBLOCO  deslocar, e ir ao estado 90
+    VARIAVEL  deslocar, e ir ao estado 37
+    INT       deslocar, e ir ao estado 38
+    CHAR      deslocar, e ir ao estado 39
+    REAL      deslocar, e ir ao estado 40
+    SUB       deslocar, e ir ao estado 41
+    NOT       deslocar, e ir ao estado 42
+    ABREP     deslocar, e ir ao estado 43
+
+    varint      ir ao estado 44
+    valor       ir ao estado 45
+    opmod       ir ao estado 46
+    expressaoA  ir ao estado 88
+    varlogica   ir ao estado 89
 
 
 Estado 78
 
-   54 loopfor: FOR ABREP VARIAVEL $@2 . PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
+   51 condif: IF ABREP opLogicas FECHAP . INICIOBLOCO sentencas FIMBLOCO
 
-    PTVIRGULA  deslocar, e ir ao estado 91
+    INICIOBLOCO  deslocar, e ir ao estado 90
 
 
 Estado 79
 
-   34 ler: ENTRADA ABREP VARIAVEL FECHAP . PTVIRGULA
+   55 loopwhile: WHILE ABREP opLogicas FECHAP . INICIOBLOCO sentencas FIMBLOCO
 
-    PTVIRGULA  deslocar, e ir ao estado 92
+    INICIOBLOCO  deslocar, e ir ao estado 91
 
 
 Estado 80
 
-   33 escrever: SAIDA ABREP expressaoA FECHAP . PTVIRGULA
+   54 loopfor: FOR ABREP atribuirfim opLogicas . PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    PTVIRGULA  deslocar, e ir ao estado 93
+    PTVIRGULA  deslocar, e ir ao estado 92
 
 
 Estado 81
 
+   35 ler: ENTRADA ABREP VARIAVEL FECHAP . PTVIRGULA
+
+    PTVIRGULA  deslocar, e ir ao estado 93
+
+
+Estado 82
+
+   34 escrever: SAIDA ABREP expressaoA FECHAP . PTVIRGULA
+
+    PTVIRGULA  deslocar, e ir ao estado 94
+
+
+Estado 83
+
    11 sentencas: sentencas . sentenca
-   52 condifelse: condif ELSE INICIOBLOCO sentencas . FIMBLOCO
+   53 condifelse: condif ELSE INICIOBLOCO sentencas . FIMBLOCO
 
     VARIAVEL  deslocar, e ir ao estado 3
-    FIMBLOCO  deslocar, e ir ao estado 94
+    FIMBLOCO  deslocar, e ir ao estado 95
     T_INT     deslocar, e ir ao estado 4
     T_CHAR    deslocar, e ir ao estado 5
     T_REAL    deslocar, e ir ao estado 6
@@ -1119,48 +1155,42 @@ Estado 81
     ENTRADA   [reduzir usando a regra 9 (sentenca)]
     SAIDA     [reduzir usando a regra 9 (sentenca)]
 
-    sentenca    ir ao estado 31
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 32
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
-Estado 82
-
-   32 atribuir: VARIAVEL $@1 ATRIBUICAO expressaoA PTVIRGULA .
-
-    $padrão  reduzir usando a regra 32 (atribuir)
-
-
-Estado 83
+Estado 84
 
    22 expressaoA: ABREP expressaoA FECHAP .
 
     $padrão  reduzir usando a regra 22 (expressaoA)
 
 
-Estado 84
+Estado 85
 
    17 opmod: varint MOD varint .
 
     $padrão  reduzir usando a regra 17 (opmod)
 
 
-Estado 85
+Estado 86
 
    23 expressaoA: expressaoA . operacoes expressaoA
    23           | expressaoA operacoes expressaoA .
 
-    SOMA   deslocar, e ir ao estado 61
-    SUB    deslocar, e ir ao estado 62
-    MULTI  deslocar, e ir ao estado 63
-    DIVI   deslocar, e ir ao estado 64
+    SOMA   deslocar, e ir ao estado 63
+    SUB    deslocar, e ir ao estado 64
+    MULTI  deslocar, e ir ao estado 65
+    DIVI   deslocar, e ir ao estado 66
 
     SOMA      [reduzir usando a regra 23 (expressaoA)]
     SUB       [reduzir usando a regra 23 (expressaoA)]
@@ -1168,49 +1198,49 @@ Estado 85
     DIVI      [reduzir usando a regra 23 (expressaoA)]
     $padrão  reduzir usando a regra 23 (expressaoA)
 
-    operacoes  ir ao estado 71
-
-
-Estado 86
-
-   23 expressaoA: expressaoA . operacoes expressaoA
-   45 opcomp: expressaoA relacional expressaoA .
-
-    SOMA   deslocar, e ir ao estado 61
-    SUB    deslocar, e ir ao estado 62
-    MULTI  deslocar, e ir ao estado 63
-    DIVI   deslocar, e ir ao estado 64
-
-    $padrão  reduzir usando a regra 45 (opcomp)
-
-    operacoes  ir ao estado 71
+    operacoes  ir ao estado 73
 
 
 Estado 87
 
    23 expressaoA: expressaoA . operacoes expressaoA
-   38 varlogica: expressaoA .
+   46 opcomp: expressaoA relacional expressaoA .
 
-    SOMA   deslocar, e ir ao estado 61
-    SUB    deslocar, e ir ao estado 62
-    MULTI  deslocar, e ir ao estado 63
-    DIVI   deslocar, e ir ao estado 64
+    SOMA   deslocar, e ir ao estado 63
+    SUB    deslocar, e ir ao estado 64
+    MULTI  deslocar, e ir ao estado 65
+    DIVI   deslocar, e ir ao estado 66
 
-    $padrão  reduzir usando a regra 38 (varlogica)
+    $padrão  reduzir usando a regra 46 (opcomp)
 
-    operacoes  ir ao estado 71
+    operacoes  ir ao estado 73
 
 
 Estado 88
 
-   46 oplogica: varlogica operadorL varlogica .
+   23 expressaoA: expressaoA . operacoes expressaoA
+   39 varlogica: expressaoA .
 
-    $padrão  reduzir usando a regra 46 (oplogica)
+    SOMA   deslocar, e ir ao estado 63
+    SUB    deslocar, e ir ao estado 64
+    MULTI  deslocar, e ir ao estado 65
+    DIVI   deslocar, e ir ao estado 66
+
+    $padrão  reduzir usando a regra 39 (varlogica)
+
+    operacoes  ir ao estado 73
 
 
 Estado 89
 
-   50 condif: IF ABREP opLogicas FECHAP INICIOBLOCO . sentencas FIMBLOCO
+   47 oplogica: varlogica operadorL varlogica .
+
+    $padrão  reduzir usando a regra 47 (oplogica)
+
+
+Estado 90
+
+   51 condif: IF ABREP opLogicas FECHAP INICIOBLOCO . sentencas FIMBLOCO
 
     VARIAVEL  deslocar, e ir ao estado 3
     T_INT     deslocar, e ir ao estado 4
@@ -1233,20 +1263,21 @@ Estado 89
     SAIDA     [reduzir usando a regra 9 (sentenca)]
     $padrão  reduzir usando a regra 9 (sentenca)
 
-    sentenca    ir ao estado 12
-    sentencas   ir ao estado 95
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 12
+    sentencas    ir ao estado 96
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
-Estado 90
+Estado 91
 
    55 loopwhile: WHILE ABREP opLogicas FECHAP INICIOBLOCO . sentencas FIMBLOCO
 
@@ -1271,100 +1302,54 @@ Estado 90
     SAIDA     [reduzir usando a regra 9 (sentenca)]
     $padrão  reduzir usando a regra 9 (sentenca)
 
-    sentenca    ir ao estado 12
-    sentencas   ir ao estado 96
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
-
-
-Estado 91
-
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA . expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
-
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 97
+    sentenca     ir ao estado 12
+    sentencas    ir ao estado 97
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
 Estado 92
 
-   34 ler: ENTRADA ABREP VARIAVEL FECHAP PTVIRGULA .
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA . atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    $padrão  reduzir usando a regra 34 (ler)
+    VARIAVEL  deslocar, e ir ao estado 3
+
+    atribuir  ir ao estado 98
 
 
 Estado 93
 
-   33 escrever: SAIDA ABREP expressaoA FECHAP PTVIRGULA .
+   35 ler: ENTRADA ABREP VARIAVEL FECHAP PTVIRGULA .
 
-    $padrão  reduzir usando a regra 33 (escrever)
+    $padrão  reduzir usando a regra 35 (ler)
 
 
 Estado 94
 
-   52 condifelse: condif ELSE INICIOBLOCO sentencas FIMBLOCO .
+   34 escrever: SAIDA ABREP expressaoA FECHAP PTVIRGULA .
 
-    $padrão  reduzir usando a regra 52 (condifelse)
+    $padrão  reduzir usando a regra 34 (escrever)
 
 
 Estado 95
 
-   11 sentencas: sentencas . sentenca
-   50 condif: IF ABREP opLogicas FECHAP INICIOBLOCO sentencas . FIMBLOCO
+   53 condifelse: condif ELSE INICIOBLOCO sentencas FIMBLOCO .
 
-    VARIAVEL  deslocar, e ir ao estado 3
-    FIMBLOCO  deslocar, e ir ao estado 98
-    T_INT     deslocar, e ir ao estado 4
-    T_CHAR    deslocar, e ir ao estado 5
-    T_REAL    deslocar, e ir ao estado 6
-    IF        deslocar, e ir ao estado 7
-    WHILE     deslocar, e ir ao estado 8
-    FOR       deslocar, e ir ao estado 9
-    ENTRADA   deslocar, e ir ao estado 10
-    SAIDA     deslocar, e ir ao estado 11
-
-    VARIAVEL  [reduzir usando a regra 9 (sentenca)]
-    FIMBLOCO  [reduzir usando a regra 9 (sentenca)]
-    T_INT     [reduzir usando a regra 9 (sentenca)]
-    T_CHAR    [reduzir usando a regra 9 (sentenca)]
-    T_REAL    [reduzir usando a regra 9 (sentenca)]
-    IF        [reduzir usando a regra 9 (sentenca)]
-    WHILE     [reduzir usando a regra 9 (sentenca)]
-    FOR       [reduzir usando a regra 9 (sentenca)]
-    ENTRADA   [reduzir usando a regra 9 (sentenca)]
-    SAIDA     [reduzir usando a regra 9 (sentenca)]
-
-    sentenca    ir ao estado 31
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    $padrão  reduzir usando a regra 53 (condifelse)
 
 
 Estado 96
 
    11 sentencas: sentencas . sentenca
-   55 loopwhile: WHILE ABREP opLogicas FECHAP INICIOBLOCO sentencas . FIMBLOCO
+   51 condif: IF ABREP opLogicas FECHAP INICIOBLOCO sentencas . FIMBLOCO
 
     VARIAVEL  deslocar, e ir ao estado 3
     FIMBLOCO  deslocar, e ir ao estado 99
@@ -1388,116 +1373,90 @@ Estado 96
     ENTRADA   [reduzir usando a regra 9 (sentenca)]
     SAIDA     [reduzir usando a regra 9 (sentenca)]
 
-    sentenca    ir ao estado 31
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 32
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
 Estado 97
 
-   23 expressaoA: expressaoA . operacoes expressaoA
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA . PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
+   11 sentencas: sentencas . sentenca
+   55 loopwhile: WHILE ABREP opLogicas FECHAP INICIOBLOCO sentencas . FIMBLOCO
 
-    SOMA       deslocar, e ir ao estado 61
-    SUB        deslocar, e ir ao estado 62
-    MULTI      deslocar, e ir ao estado 63
-    DIVI       deslocar, e ir ao estado 64
-    PTVIRGULA  deslocar, e ir ao estado 100
+    VARIAVEL  deslocar, e ir ao estado 3
+    FIMBLOCO  deslocar, e ir ao estado 100
+    T_INT     deslocar, e ir ao estado 4
+    T_CHAR    deslocar, e ir ao estado 5
+    T_REAL    deslocar, e ir ao estado 6
+    IF        deslocar, e ir ao estado 7
+    WHILE     deslocar, e ir ao estado 8
+    FOR       deslocar, e ir ao estado 9
+    ENTRADA   deslocar, e ir ao estado 10
+    SAIDA     deslocar, e ir ao estado 11
 
-    operacoes  ir ao estado 71
+    VARIAVEL  [reduzir usando a regra 9 (sentenca)]
+    FIMBLOCO  [reduzir usando a regra 9 (sentenca)]
+    T_INT     [reduzir usando a regra 9 (sentenca)]
+    T_CHAR    [reduzir usando a regra 9 (sentenca)]
+    T_REAL    [reduzir usando a regra 9 (sentenca)]
+    IF        [reduzir usando a regra 9 (sentenca)]
+    WHILE     [reduzir usando a regra 9 (sentenca)]
+    FOR       [reduzir usando a regra 9 (sentenca)]
+    ENTRADA   [reduzir usando a regra 9 (sentenca)]
+    SAIDA     [reduzir usando a regra 9 (sentenca)]
+
+    sentenca     ir ao estado 32
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
 Estado 98
 
-   50 condif: IF ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO .
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir . FECHAP INICIOBLOCO sentencas FIMBLOCO
 
-    $padrão  reduzir usando a regra 50 (condif)
+    FECHAP  deslocar, e ir ao estado 101
 
 
 Estado 99
+
+   51 condif: IF ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO .
+
+    $padrão  reduzir usando a regra 51 (condif)
+
+
+Estado 100
 
    55 loopwhile: WHILE ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO .
 
     $padrão  reduzir usando a regra 55 (loopwhile)
 
 
-Estado 100
-
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA . opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
-
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    NOT       deslocar, e ir ao estado 40
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 45
-    varlogica   ir ao estado 46
-    opcomp      ir ao estado 47
-    oplogica    ir ao estado 48
-    opLogicas   ir ao estado 101
-
-
 Estado 101
 
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas . PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP . INICIOBLOCO sentencas FIMBLOCO
 
-    PTVIRGULA  deslocar, e ir ao estado 102
+    INICIOBLOCO  deslocar, e ir ao estado 102
 
 
 Estado 102
 
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA . expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO
-
-    VARIAVEL  deslocar, e ir ao estado 35
-    INT       deslocar, e ir ao estado 36
-    CHAR      deslocar, e ir ao estado 37
-    REAL      deslocar, e ir ao estado 38
-    SUB       deslocar, e ir ao estado 39
-    ABREP     deslocar, e ir ao estado 41
-
-    varint      ir ao estado 42
-    valor       ir ao estado 43
-    opmod       ir ao estado 44
-    expressaoA  ir ao estado 103
-
-
-Estado 103
-
-   23 expressaoA: expressaoA . operacoes expressaoA
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA . FECHAP INICIOBLOCO sentencas FIMBLOCO
-
-    SOMA    deslocar, e ir ao estado 61
-    SUB     deslocar, e ir ao estado 62
-    MULTI   deslocar, e ir ao estado 63
-    DIVI    deslocar, e ir ao estado 64
-    FECHAP  deslocar, e ir ao estado 104
-
-    operacoes  ir ao estado 71
-
-
-Estado 104
-
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP . INICIOBLOCO sentencas FIMBLOCO
-
-    INICIOBLOCO  deslocar, e ir ao estado 105
-
-
-Estado 105
-
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO . sentencas FIMBLOCO
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO . sentencas FIMBLOCO
 
     VARIAVEL  deslocar, e ir ao estado 3
     T_INT     deslocar, e ir ao estado 4
@@ -1520,26 +1479,27 @@ Estado 105
     SAIDA     [reduzir usando a regra 9 (sentenca)]
     $padrão  reduzir usando a regra 9 (sentenca)
 
-    sentenca    ir ao estado 12
-    sentencas   ir ao estado 106
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 12
+    sentencas    ir ao estado 103
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
-Estado 106
+Estado 103
 
    11 sentencas: sentencas . sentenca
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas . FIMBLOCO
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas . FIMBLOCO
 
     VARIAVEL  deslocar, e ir ao estado 3
-    FIMBLOCO  deslocar, e ir ao estado 107
+    FIMBLOCO  deslocar, e ir ao estado 104
     T_INT     deslocar, e ir ao estado 4
     T_CHAR    deslocar, e ir ao estado 5
     T_REAL    deslocar, e ir ao estado 6
@@ -1560,20 +1520,21 @@ Estado 106
     ENTRADA   [reduzir usando a regra 9 (sentenca)]
     SAIDA     [reduzir usando a regra 9 (sentenca)]
 
-    sentenca    ir ao estado 31
-    tipos       ir ao estado 14
-    novavar     ir ao estado 15
-    atribuir    ir ao estado 16
-    escrever    ir ao estado 17
-    ler         ir ao estado 18
-    condif      ir ao estado 19
-    condifelse  ir ao estado 20
-    loopfor     ir ao estado 21
-    loopwhile   ir ao estado 22
+    sentenca     ir ao estado 32
+    tipos        ir ao estado 14
+    novavar      ir ao estado 15
+    atribuir     ir ao estado 16
+    atribuirfim  ir ao estado 17
+    escrever     ir ao estado 18
+    ler          ir ao estado 19
+    condif       ir ao estado 20
+    condifelse   ir ao estado 21
+    loopfor      ir ao estado 22
+    loopwhile    ir ao estado 23
 
 
-Estado 107
+Estado 104
 
-   54 loopfor: FOR ABREP VARIAVEL $@2 PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO sentencas FIMBLOCO .
+   54 loopfor: FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO .
 
     $padrão  reduzir usando a regra 54 (loopfor)

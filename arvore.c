@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 extern FILE *yyout;
+extern int lcont;
 
 node *raiz;
 listaVars *prim = NULL;
@@ -124,7 +125,8 @@ void imprime(node *node)
         break;
     case ATRIBUIR:
         fprintf(yyout, "%s = ", node->nome);
-        imprime(node->afrente);
+        break;
+    case ATRIBUIRFIM:
         fprintf(yyout, ";");
         break;
     case SAIDA:
@@ -163,12 +165,10 @@ void imprime(node *node)
         fprintf(yyout, "}");
         break;
     case FOR:
-        fprintf(yyout, "for(%s = ", node->nome);
+        fprintf(yyout, "for(");
         imprime(node->afrente);
-        fprintf(yyout, ";");
         imprime(node->afrente1);
         fprintf(yyout, ";");
-        fprintf(yyout, "%s = %s + ", node->nome, node->nome);
         imprime(node->afrente2);
         fprintf(yyout, "){");
         imprimetab(1);
@@ -204,10 +204,11 @@ void insereLista(char *nome)
     }
     if (atual != NULL)
     {
+        printf("Linha $d: variavel %s ja declarada\n", lcont, nome);
         exit(1);
     }
     listaVars *novo = (listaVars *)malloc(sizeof(listaVars));
-    strcpy(novo->nome, nome);
+    novo->nome = strdup(nome);
     novo->prox = NULL;
     if (ant == NULL)
     {
@@ -228,7 +229,7 @@ int buscaLista(char *nome)
     }
     if (atual == NULL)
     {
-        printf("Variavel %s nao declarada\n", nome);
+        printf("Linha %d: variavel %s nao declarada\n", lcont, nome);
         exit(1);
     }
     return 1;

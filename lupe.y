@@ -65,12 +65,12 @@
 %token SAIDA
 
 %token EXPPARS EXPOPS EXPSUB
-%token NOVAVAR ATRIBUIR
+%token NOVAVAR ATRIBUIR ATRIBUIRFIM
 %token NOTVAR OPCOMP OPLOGICA
 
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
-%type <nos> atribuir escrever ler loopfor loopwhile condif condifelse
-%type <nos> opcomp varlogica oplogica opLogicas
+%type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
+%type <nos> condifelse opcomp varlogica oplogica opLogicas
 %type <tipoint> operacoes tipos operadorL relacional
 
 %start inicio
@@ -80,7 +80,7 @@ inicio: INICIOPROG sentencas FIMPROG{
     raiz = $2;    
 };
 sentenca:
-    atribuir {
+    atribuirfim {
         $$ = $1;
     } 
     | novavar {
@@ -223,16 +223,21 @@ novavar:
         insereLista(yylval.var);
     };
 atribuir: 
-    VARIAVEL {temp = yylval.var;} ATRIBUICAO expressaoA PTVIRGULA{
+    VARIAVEL {temp = yylval.var;} ATRIBUICAO expressaoA{
         $$ = (node*)malloc(sizeof(node));
-        $$->afrente = $4;
         $$->nome = temp;
         $$->token = ATRIBUIR;
         $$->esq = NULL;
-        $$->dir = NULL;
+        $$->dir = $4;
         buscaLista(temp);
     };
-
+atribuirfim:
+    atribuir PTVIRGULA{
+        $$ = (node*)malloc(sizeof(node));
+        $$->token = ATRIBUIRFIM;
+        $$->esq = $1;
+        $$->dir = NULL;
+    }
 escrever:
     SAIDA ABREP expressaoA FECHAP PTVIRGULA{
         $$ = (node*)malloc(sizeof(node));
@@ -336,12 +341,12 @@ condifelse:
     };
 
 loopfor: 
-    FOR ABREP VARIAVEL {temp2 = yylval.var;} PTVIRGULA expressaoA PTVIRGULA opLogicas PTVIRGULA expressaoA FECHAP INICIOBLOCO  sentencas FIMBLOCO{
+    FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO  sentencas FIMBLOCO{
         $$ = (node*)malloc(sizeof(node));
-        $$->afrente = $6;
-        $$->afrente1 = $8;
-        $$->afrente2 = $10;
-        $$->afrente3 = $13;
+        $$->afrente = $3;
+        $$->afrente1 = $4;
+        $$->afrente2 = $6;
+        $$->afrente3 = $9;
         $$->nome = temp2;
         $$->token = FOR;
         $$->esq = NULL;
