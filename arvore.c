@@ -150,6 +150,9 @@ void imprime(node *node)
     case ADDFIM:
         fprintf(yyout, ";");
         break;
+    case DADOS:
+        fprintf(yyout, "<< ");
+        break;
     case SAIDA:
         fprintf(yycom, "SAIDA DE DADOS");
         fprintf(yyout, "std::cout << ");
@@ -160,6 +163,9 @@ void imprime(node *node)
         fprintf(yycom, "ENTRADA DE DADOS");
         fprintf(yyout, "std::cin >> %s", node->nome);
         fprintf(yyout, ";");
+        break;
+    case PALAVRA:
+        fprintf(yyout, "%s", node->nome);
         break;
     case NOTVAR:
         fprintf(yyout, "!");

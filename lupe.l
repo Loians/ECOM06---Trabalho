@@ -46,13 +46,16 @@ letra           [a-zA-Z]
 "lpin"              { fprintf(yytok,"ENTRADA ");    return ENTRADA;       }
 "lpout"             { fprintf(yytok,"SAIDA ");      return SAIDA;         }
 
-{letra}({letra}|{numero})* { yylval.var = strdup(yytext);fprintf(yytok,"VARIAVEL ");return VARIAVEL; }
+{letra}({letra}|{numero})*  {yylval.var = strdup(yytext);       fprintf(yytok,"VARIAVEL "); return VARIAVEL; }
 
-{numero}+           {yylval.inteiro = atoi(yytext);fprintf(yytok,"INT ");return INT;}
+{numero}+                   {yylval.inteiro = atoi(yytext);     fprintf(yytok,"INT ");      return INT;}
 
-"'"({numero}|{letra})"'" {yylval.charac = yytext[1];fprintf(yytok,"CHAR ");return CHAR;}
+"'"."'"                     {yylval.charac = yytext[1];         fprintf(yytok,"CHAR ");     return CHAR;}
 
-{numero}+"."{numero}* {yylval.real = atof(yytext);fprintf(yytok,"REAL ");return REAL;} 
+"\"".*"\""                  {yylval.palavra = strdup(yytext);   fprintf(yytok,"PALAVRA");   return PALAVRA;}
+
+{numero}+"."{numero}*       {yylval.real = atof(yytext);        fprintf(yytok,"REAL ");     return REAL;}
+
 [\t\r \f]
 [\n]                {lcont++; fprintf(yytok,"\n"); }
 .                   {printf("String desconhecida [%s]\n",yytext);erro++;}

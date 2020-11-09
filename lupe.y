@@ -21,6 +21,7 @@
     char charac;
     int inteiro;
     float real;
+    char* palavra;
     char* var;
     node *nos;
     int tipoint;
@@ -30,6 +31,7 @@
 %token INT
 %token CHAR
 %token REAL
+%token PALAVRA
 
 %token ATRIBUICAO
 %token SOMA
@@ -66,14 +68,14 @@
 %token ENTRADA
 %token SAIDA
 
-%token EXPPARS EXPOPS EXPSUB
-%token NOVAVAR ATRIBUIR ADDFIM
-%token NOTVAR OPCOMP OPLOGICA POSINC POSDEC INCDECFIM
+%token EXPPARS EXPOPS EXPSUB POSINC POSDEC INCDECFIM
+%token NOVAVAR ATRIBUIR ADDFIM DADOS
+%token NOTVAR OPCOMP OPLOGICA
 
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
 %type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
-%type <nos> condifelse opcomp varlogica oplogica opLogicas 
-%type <nos> posinc posdec incdec incdecfim
+%type <nos> condifelse opcomp varlogica opLogicas 
+%type <nos> posinc posdec incdec incdecfim dados
 %type <tipoint> operacoes tipos operadorL relacional
 
 %start inicio
@@ -281,14 +283,33 @@ incdecfim:
         $$->dir = NULL;
     };
 
+dados:
+    PALAVRA{
+        $$ = (node*)malloc(sizeof(node));
+        $$->nome = yylval.palavra;
+        $$->token = PALAVRA;
+        $$->esq = NULL;
+        $$->dir = NULL;
+    }
+    | expressaoA{
+        $$ = $1;
+    }
+    | dados VIRGULA expressaoA{
+        $$ = (node*)malloc(sizeof(node));
+        $$->token = DADOS;
+        $$->esq = $1;
+        $$->dir = $3;
+    };
+
 escrever:
-    SAIDA ABREP expressaoA FECHAP PTVIRGULA{
+    SAIDA ABREP dados FECHAP PTVIRGULA{
         $$ = (node*)malloc(sizeof(node));
         $$->token = SAIDA;
         $$->afrente = $3;
         $$->esq = NULL;
         $$->dir = NULL;
     };
+
 
 ler:
     ENTRADA ABREP VARIAVEL FECHAP PTVIRGULA{
@@ -316,7 +337,11 @@ varlogica:
     }
     | expressaoA{
         $$ = $1;
-    };
+    }
+    | opcomp{
+        $$ = $1;
+    }
+    ;
 relacional:
     IGUAL {
         $$ = IGUAL;
@@ -344,24 +369,24 @@ opcomp:
         $$->esq = $1;
         $$->dir = $3;
     };
-oplogica:
-    varlogica operadorL varlogica {
+opLogicas:
+    varlogica{
+        $$ = $1;
+    }
+    | opLogicas operadorL opLogicas {
         $$ = (node*)malloc(sizeof(node));
         $$->caso = $2;
         $$->token = OPLOGICA;
         $$->esq = $1;
         $$->dir = $3;
-    }; 
-opLogicas:
-    oplogica {
-        $$ = $1;
     }
-    | opcomp {
-        $$ = $1;
-    } 
-    | varlogica{
-        $$ = $1;
-    };
+    | ABREP opLogicas FECHAP{
+        $$ = (node*)malloc(sizeof(node));
+        $$->afrente = $2;
+        $$->token = EXPPARS;
+        $$->esq = NULL;
+        $$->dir = NULL;
+    }; 
 
 condif: 
     IF ABREP opLogicas FECHAP INICIOBLOCO sentencas FIMBLOCO{
@@ -419,16 +444,25 @@ loopwhile:
 
 int main(int argc, char *argv[])
 {
+    char *entrada , *entrada2;
+    entrada  = strdup(argv[1]);
+    entrada2 = strdup(argv[1]);
+    if(argc == 1){
+        printf("Eh necessario um codigo lupe");
+        exit(1);
+    }
     yyin = fopen(argv[1],"r");
+    
     yyout = fopen("lupe.cpp","w");
-    yytok = fopen("tokens.txt","w");
-    yycom = fopen("comandos.txt","w");
+    yytok = fopen(strcat(entrada,"-tokens.txt"),"w");
+    yycom = fopen(strcat(entrada2,"-comandos.txt"),"w");
+
     fprintf(yycom, "\n\n\n\t");
 
     printf("\n");
     yyparse();
     if(erro == 0){
-        fprintf(stderr, "ACCEPTED!\n\n");
+        fprintf(stderr, "Compilado com sucesso!\n");
     }
     fprintf(yyout,"#include <iostream>\n\n");
     fprintf(yyout,"int main(){\n\t");
@@ -436,7 +470,13 @@ int main(int argc, char *argv[])
     imprime(raiz);
 
     fprintf(yyout,"\n\treturn 0;\n}\n");
+    fclose(yyin);
+    fclose(yyout);
+    fclose(yytok);
+    fclose(yycom);
+    fclose(stderr);
 
+    system("g++ lupe.cpp -o out.exe && out");
     return 0;
 }
 
