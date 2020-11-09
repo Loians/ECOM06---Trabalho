@@ -9,6 +9,8 @@
     extern int lcont;
     extern node *raiz;
     extern FILE *yyout;
+    extern FILE *yytok;
+    extern FILE *yycom;
     int erro = 0;
     char *temp, *temp2;
 %}
@@ -65,12 +67,13 @@
 %token SAIDA
 
 %token EXPPARS EXPOPS EXPSUB
-%token NOVAVAR ATRIBUIR ATRIBUIRFIM
-%token NOTVAR OPCOMP OPLOGICA
+%token NOVAVAR ATRIBUIR ADDFIM
+%token NOTVAR OPCOMP OPLOGICA POSINC POSDEC INCDECFIM
 
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
 %type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
-%type <nos> condifelse opcomp varlogica oplogica opLogicas
+%type <nos> condifelse opcomp varlogica oplogica opLogicas 
+%type <nos> posinc posdec incdec incdecfim
 %type <tipoint> operacoes tipos operadorL relacional
 
 %start inicio
@@ -99,6 +102,9 @@ sentenca:
         $$ = $1;
     }
     | condifelse {
+        $$ = $1;
+    }
+    | incdecfim {
         $$ = $1;
     }
     | {
@@ -231,13 +237,50 @@ atribuir:
         $$->dir = $4;
         buscaLista(temp);
     };
+
 atribuirfim:
     atribuir PTVIRGULA{
         $$ = (node*)malloc(sizeof(node));
-        $$->token = ATRIBUIRFIM;
+        $$->token = ADDFIM;
         $$->esq = $1;
         $$->dir = NULL;
+    };
+
+posinc:
+    VARIAVEL SOMA SOMA{
+        $$ = (node*)malloc(sizeof(node));
+        $$->token = POSINC;
+        $$->nome = yylval.var;
+        buscaLista(yylval.var);
+        $$->esq = NULL;
+        $$->dir = NULL;
+    };
+posdec:
+    VARIAVEL SUB SUB{
+        $$ = (node*)malloc(sizeof(node));
+        $$->token = POSDEC;
+        $$->nome = yylval.var;
+        buscaLista(yylval.var);
+        $$->esq = NULL;
+        $$->dir = NULL;
+    };
+
+incdec:
+    posinc{
+        $$ = $1;
     }
+    | posdec{
+        $$ = $1;
+    };   
+
+incdecfim:
+    incdec PTVIRGULA{
+        $$ = (node*)malloc(sizeof(node));
+        $$->token = ADDFIM;
+        $$->esq = $1;
+        $$->dir = NULL;
+    };
+
 escrever:
     SAIDA ABREP expressaoA FECHAP PTVIRGULA{
         $$ = (node*)malloc(sizeof(node));
@@ -246,6 +289,7 @@ escrever:
         $$->esq = NULL;
         $$->dir = NULL;
     };
+
 ler:
     ENTRADA ABREP VARIAVEL FECHAP PTVIRGULA{
         $$ = (node*)malloc(sizeof(node));
@@ -341,7 +385,18 @@ condifelse:
     };
 
 loopfor: 
-    FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO  sentencas FIMBLOCO{
+    FOR ABREP atribuirfim opLogicas PTVIRGULA atribuir FECHAP INICIOBLOCO sentencas FIMBLOCO{
+        $$ = (node*)malloc(sizeof(node));
+        $$->afrente = $3;
+        $$->afrente1 = $4;
+        $$->afrente2 = $6;
+        $$->afrente3 = $9;
+        $$->nome = temp2;
+        $$->token = FOR;
+        $$->esq = NULL;
+        $$->dir = NULL;
+    }
+    | FOR ABREP atribuirfim opLogicas PTVIRGULA incdec FECHAP INICIOBLOCO sentencas FIMBLOCO {
         $$ = (node*)malloc(sizeof(node));
         $$->afrente = $3;
         $$->afrente1 = $4;
@@ -364,10 +419,13 @@ loopwhile:
 
 %%
 
-int main()
+int main(int argc, char *argv[])
 {
-    yyin = stdin;
+    yyin = fopen(argv[1],"r");
     yyout = fopen("lupe.cpp","w");
+    yytok = fopen("token.txt","w");
+    yycom = fopen("comandos.txt","w");
+
     printf("\n");
     yyparse();
     if(erro == 0){

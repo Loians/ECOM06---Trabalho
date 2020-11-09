@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 extern FILE *yyout;
+FILE *yycom;
 extern int lcont;
 
 node *raiz;
@@ -126,7 +127,13 @@ void imprime(node *node)
     case ATRIBUIR:
         fprintf(yyout, "%s = ", node->nome);
         break;
-    case ATRIBUIRFIM:
+    case POSINC:
+        fprintf(yyout, "%s++", node->nome);
+        break;
+    case POSDEC:
+        fprintf(yyout, "%s--", node->nome);
+        break;
+    case ADDFIM:
         fprintf(yyout, ";");
         break;
     case SAIDA:

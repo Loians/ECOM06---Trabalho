@@ -4,57 +4,57 @@
     extern void yyerror(const char* error);
     extern int erro;
     int lcont = 1;
+    FILE* yytok;
 %}
 
 numero          [0-9]
 letra           [a-zA-Z]
 
 %%
-"="                 { return ATRIBUICAO;    }
-"+"                 { return SOMA;          }
-"-"                 { return SUB;           }
-"*"                 { return MULTI;         }
-"/"                 { return DIVI;          }
-"%"                 { return MOD;           }
-"&&"                { return AND;           }
-"||"                { return OR;            }
-"!"                 { return NOT;           }
-"=="                { return IGUAL;         }
-">="                { return MAIORIGUAL;    }
-"<="                { return MENORIGUAL;    }
-">"                 { return MAIOR;         }
-"<"                 { return MENOR;         }
-"!="                { return DIFERENTE;     }
+"="                 { fprintf(yytok,"ATRIBUICAO "); return ATRIBUICAO;}
+"+"                 { fprintf(yytok,"SOMA ");       return SOMA;          }
+"-"                 { fprintf(yytok,"SUB ");        return SUB;           }
+"*"                 { fprintf(yytok,"MULTI ");      return MULTI;         }
+"/"                 { fprintf(yytok,"DIVI ");       return DIVI;          }
+"%"                 { fprintf(yytok,"MOD ");        return MOD;           }
+"&&"                { fprintf(yytok,"AND ");        return AND;           }
+"||"                { fprintf(yytok,"OR ");         return OR;            }
+"!"                 { fprintf(yytok,"NOT ");        return NOT;           }
+"=="                { fprintf(yytok,"IGUAL ");      return IGUAL;         }
+">="                { fprintf(yytok,"MAIORIGUAL "); return MAIORIGUAL;    }
+"<="                { fprintf(yytok,"MENORIGUAL "); return MENORIGUAL;    }
+">"                 { fprintf(yytok,"MAIOR ");      return MAIOR;         }
+"<"                 { fprintf(yytok,"MENOR ");      return MENOR;         }
+"!="                { fprintf(yytok,"DIFERENTE ");  return DIFERENTE;     }
+ 
+","                 { fprintf(yytok,"VIRGULA ");    return VIRGULA;       }
+";"                 { fprintf(yytok,"PTVIRGULA ");  return PTVIRGULA;     }
+"("                 { fprintf(yytok,"ABREP ");      return ABREP;         }
+")"                 { fprintf(yytok,"FECHAP ");     return FECHAP;        }
+"{"                 { fprintf(yytok,"INICIOBLOCO ");return INICIOBLOCO;   }
+"}"                 { fprintf(yytok,"FIMBLOCO ");   return FIMBLOCO;      }
+ 
+"begin"             { fprintf(yytok,"INICIOPROG "); return INICIOPROG;    }
+"end"               { fprintf(yytok,"FIMPROG ");    return FIMPROG;       }
+"int"               { fprintf(yytok,"T_INT ");      return T_INT;         }
+"char"              { fprintf(yytok,"T_CHAR ");     return T_CHAR;        }
+"real"              { fprintf(yytok,"T_REAL ");     return T_REAL;        }
+"if"                { fprintf(yytok,"IF ");         return IF;            }
+"else"              { fprintf(yytok,"ELSE ");       return ELSE;          }
+"while"             { fprintf(yytok,"WHILE ");      return WHILE;         }
+"for"               { fprintf(yytok,"FOR ");        return FOR;           }
+"lpin"              { fprintf(yytok,"ENTRADA ");    return ENTRADA;       }
+"lpout"             { fprintf(yytok,"SAIDA ");      return SAIDA;         }
 
-","                 { return VIRGULA;       }
-";"                 { return PTVIRGULA;     }
-"("                 { return ABREP;         }
-")"                 { return FECHAP;        }
-"{"                 { return INICIOBLOCO;   }
-"}"                 { return FIMBLOCO;      }
+{letra}({letra}|{numero})* { yylval.var = strdup(yytext);fprintf(yytok,"VARIAVEL ");return VARIAVEL; }
 
-"begin"             { return INICIOPROG;    }
-"end"               { return FIMPROG;       }
-"int"               { return T_INT;         }
-"char"              { return T_CHAR;        }
-"real"              { return T_REAL;        }
-"if"                { return IF;            }
-"else"              { return ELSE;          }
-"while"             { return WHILE;         }
-"for"               { return FOR;           }
-"lpin"              { return ENTRADA;       }
-"lpout"             { return SAIDA;         }
+{numero}+           {yylval.inteiro = atoi(yytext);fprintf(yytok,"INT ");return INT;}
 
-{letra}({letra}|{numero})* { yylval.var = strdup(yytext); return VARIAVEL; }
+"'"({numero}|{letra})"'" {yylval.charac = yytext[1];fprintf(yytok,"CHAR ");return CHAR;}
 
-{numero}+           {yylval.inteiro = atoi(yytext);return INT;}
-
-"'"({numero}|{letra})"'" {yylval.charac = yytext[1]; return CHAR;}
-
-{numero}+"."{numero}* { yylval.real = atof(yytext);return REAL;} 
-
-[ \t\r]
-[\n]                {lcont++;}
+{numero}+"."{numero}* {yylval.real = atof(yytext);fprintf(yytok,"REAL ");return REAL;} 
+[\t\r \f]
+[\n]                {lcont++; fprintf(yytok,"\n"); }
 .                   {printf("String desconhecida [%s]\n",yytext);erro++;}
 %%
 

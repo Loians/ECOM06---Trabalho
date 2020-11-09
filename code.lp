@@ -14,15 +14,15 @@ begin
     }
     if(a > 7){
         if(b>3){
-            a = a+2;
+            a--;
         }
     }else{
-        c = 2;
+        c++;
     }
-    for(a=3;a<10;a = a+1){
+    for(a=3;a<10;a++){
         b = b + 2;
         lpout(b);
-        for(c = 0; c<5 ; c = c + 1){
+        for(c = 5; c>=0 ; c--){
             lpout(c*a);
         }
     }

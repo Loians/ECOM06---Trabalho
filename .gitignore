@@ -4,3 +4,5 @@ lupe.cpp
 lupe.tab.c
 lupe.tab.h
 lex.yy.c
+tokens.txt
+comandos.txt
