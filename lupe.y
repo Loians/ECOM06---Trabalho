@@ -74,7 +74,7 @@
 
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
 %type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
-%type <nos> condifelse opcomp varlogica opLogicas 
+%type <nos> condifelse opcomp varlogica opLogicas
 %type <nos> posinc posdec incdec incdecfim dados
 %type <tipoint> operacoes tipos operadorL relacional
 
@@ -294,7 +294,7 @@ dados:
     | expressaoA{
         $$ = $1;
     }
-    | dados VIRGULA expressaoA{
+    | dados VIRGULA dados{
         $$ = (node*)malloc(sizeof(node));
         $$->token = DADOS;
         $$->esq = $1;
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
     entrada2 = strdup(argv[1]);
     if(argc == 1){
         printf("Eh necessario um codigo lupe");
-        exit(1);
+        return 1;
     }
     yyin = fopen(argv[1],"r");
     
@@ -461,9 +461,9 @@ int main(int argc, char *argv[])
 
     printf("\n");
     yyparse();
-    if(erro == 0){
-        fprintf(stderr, "Compilado com sucesso!\n");
-    }
+    if(!erro){
+        fprintf(stderr, "Analisado com sucesso!\n"); 
+    }   
     fprintf(yyout,"#include <iostream>\n\n");
     fprintf(yyout,"int main(){\n\t");
 
@@ -475,8 +475,9 @@ int main(int argc, char *argv[])
     fclose(yytok);
     fclose(yycom);
     fclose(stderr);
-
-    system("g++ lupe.cpp -o out.exe && out");
+    if(!erro){
+        system("g++ lupe.cpp -o out.exe && out");
+    }
     return 0;
 }
 

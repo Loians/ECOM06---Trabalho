@@ -6,6 +6,7 @@
 extern FILE *yyout;
 FILE *yycom;
 extern int lcont;
+extern int erro;
 
 node *raiz;
 listaVars *prim = NULL;
@@ -151,18 +152,17 @@ void imprime(node *node)
         fprintf(yyout, ";");
         break;
     case DADOS:
-        fprintf(yyout, "<< ");
+        fprintf(yyout, " << ");
         break;
     case SAIDA:
         fprintf(yycom, "SAIDA DE DADOS");
         fprintf(yyout, "std::cout << ");
         imprime(node->afrente);
-        fprintf(yyout, " << std::endl;");
+        fprintf(yyout, ";");
         break;
     case ENTRADA:
         fprintf(yycom, "ENTRADA DE DADOS");
-        fprintf(yyout, "std::cin >> %s", node->nome);
-        fprintf(yyout, ";");
+        fprintf(yyout, "std::cin >> %s;", node->nome);
         break;
     case PALAVRA:
         fprintf(yyout, "%s", node->nome);
@@ -240,7 +240,7 @@ void insereLista(char *nome)
     if (atual != NULL)
     {
         printf("Linha %d: variavel %s ja declarada\n", lcont, nome);
-        exit(1);
+        erro++;
     }
     listaVars *novo = (listaVars *)malloc(sizeof(listaVars));
     novo->nome = strdup(nome);
@@ -265,7 +265,7 @@ int buscaLista(char *nome)
     if (atual == NULL)
     {
         printf("Linha %d: variavel %s nao declarada\n", lcont, nome);
-        exit(1);
+        erro++;
     }
     return 1;
 }

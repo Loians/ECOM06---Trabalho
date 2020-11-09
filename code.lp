@@ -1,15 +1,16 @@
 begin
+    lpout("Hello world!\n");
     int a;
     a = 3 + 7;
-    lpout("a = ",a);
+    lpout("a = ",a,"\nEscreva a:");
     lpin(a);
     int b;
     b = a + 2;
     a = b % 3;
-    lpout(a);
+    lpout(a,' ');
     int c;
     c = ((a+3)+b)/5;
-    lpout(c);
+    lpout(c, ' ');
     if(c == 4){
         b = 3;
     }
@@ -22,11 +23,12 @@ begin
     }
     for(a=3;a<4;a++){
         b = b + 2;
-        lpout(b);
+        lpout(b,' ');
         for(c = 1; c>=0 ; c--){
-            lpout(c*a);
+            lpout(c*a, "\n");
         }
     }
+    lpout("\n");
     while(c>-5){
         lpout(c);
         c = c - 2;
