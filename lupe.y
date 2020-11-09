@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
 {
     yyin = fopen(argv[1],"r");
     yyout = fopen("lupe.cpp","w");
-    yytok = fopen("token.txt","w");
+    yytok = fopen("tokens.txt","w");
     yycom = fopen("comandos.txt","w");
 
     printf("\n");
