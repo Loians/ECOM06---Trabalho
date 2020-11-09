@@ -12,7 +12,7 @@
     extern FILE *yytok;
     extern FILE *yycom;
     int erro = 0;
-    char *temp, *temp2;
+    char *temp;
 %}
 
 
@@ -391,7 +391,6 @@ loopfor:
         $$->afrente1 = $4;
         $$->afrente2 = $6;
         $$->afrente3 = $9;
-        $$->nome = temp2;
         $$->token = FOR;
         $$->esq = NULL;
         $$->dir = NULL;
@@ -402,7 +401,6 @@ loopfor:
         $$->afrente1 = $4;
         $$->afrente2 = $6;
         $$->afrente3 = $9;
-        $$->nome = temp2;
         $$->token = FOR;
         $$->esq = NULL;
         $$->dir = NULL;
@@ -425,6 +423,7 @@ int main(int argc, char *argv[])
     yyout = fopen("lupe.cpp","w");
     yytok = fopen("tokens.txt","w");
     yycom = fopen("comandos.txt","w");
+    fprintf(yycom, "\n\n\n\t");
 
     printf("\n");
     yyparse();

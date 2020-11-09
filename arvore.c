@@ -10,6 +10,7 @@ extern int lcont;
 node *raiz;
 listaVars *prim = NULL;
 int cont = 1;
+char tofor = 0;
 
 void imprimetab(int i)
 {
@@ -24,8 +25,12 @@ void imprimetab(int i)
         break;
     }
     fprintf(yyout, "\n");
+    fprintf(yycom, "\n");
     for (int i = 0; i < cont; i++)
+    {
         fprintf(yyout, "\t");
+        fprintf(yycom, "\t");
+    }
 }
 
 void imprimecaso(int caso)
@@ -45,12 +50,15 @@ void imprimecaso(int caso)
         fprintf(yyout, " / ");
         break;
     case T_INT:
+        fprintf(yycom, "NOVA VARIAVEL INT");
         fprintf(yyout, "int");
         break;
     case T_CHAR:
+        fprintf(yycom, "NOVA VARIAVEL CHAR");
         fprintf(yyout, "char");
         break;
     case T_REAL:
+        fprintf(yycom, "NOVA VARIAVEL REAL");
         fprintf(yyout, "float");
         break;
     case IGUAL:
@@ -125,23 +133,31 @@ void imprime(node *node)
         fprintf(yyout, " %s;", node->nome);
         break;
     case ATRIBUIR:
+        if (!tofor)
+            fprintf(yycom, "COMANDO ATRIBUICAO");
         fprintf(yyout, "%s = ", node->nome);
         break;
     case POSINC:
+        if (!tofor)
+            fprintf(yycom, "COMANDO POSINC");
         fprintf(yyout, "%s++", node->nome);
         break;
     case POSDEC:
+        if (!tofor)
+            fprintf(yycom, "COMANDO POSDEC");
         fprintf(yyout, "%s--", node->nome);
         break;
     case ADDFIM:
         fprintf(yyout, ";");
         break;
     case SAIDA:
+        fprintf(yycom, "SAIDA DE DADOS");
         fprintf(yyout, "std::cout << ");
         imprime(node->afrente);
         fprintf(yyout, " << std::endl;");
         break;
     case ENTRADA:
+        fprintf(yycom, "ENTRADA DE DADOS");
         fprintf(yyout, "std::cin >> %s", node->nome);
         fprintf(yyout, ";");
         break;
@@ -155,6 +171,7 @@ void imprime(node *node)
         imprimecaso(node->caso);
         break;
     case IF:
+        fprintf(yycom, "COMANDO CONDICIONAL");
         fprintf(yyout, "if( ");
         imprime(node->afrente);
         fprintf(yyout, " ){");
@@ -165,6 +182,7 @@ void imprime(node *node)
         break;
     case ELSE:
         imprimetab(0);
+        fprintf(yycom, "COMANDO CONDICIONAL COMPLEMENTAR");
         fprintf(yyout, "else{");
         imprimetab(1);
         imprime(node->afrente);
@@ -172,18 +190,22 @@ void imprime(node *node)
         fprintf(yyout, "}");
         break;
     case FOR:
+        tofor = 1;
+        fprintf(yycom, "COMANDO DE REPETICAO FOR");
         fprintf(yyout, "for(");
         imprime(node->afrente);
         imprime(node->afrente1);
         fprintf(yyout, ";");
         imprime(node->afrente2);
         fprintf(yyout, "){");
+        tofor = 0;
         imprimetab(1);
         imprime(node->afrente3);
         imprimetab(2);
         fprintf(yyout, "}");
         break;
     case WHILE:
+        fprintf(yycom, "COMANDO DE REPETICAO WHILE");
         fprintf(yyout, "while( ");
         imprime(node->afrente);
         fprintf(yyout, " ){");
@@ -211,7 +233,7 @@ void insereLista(char *nome)
     }
     if (atual != NULL)
     {
-        printf("Linha $d: variavel %s ja declarada\n", lcont, nome);
+        printf("Linha %d: variavel %s ja declarada\n", lcont, nome);
         exit(1);
     }
     listaVars *novo = (listaVars *)malloc(sizeof(listaVars));
