@@ -135,7 +135,7 @@ void imprime(node *node)
         break;
     case ATRIBUIR:
         if (!tofor)
-            fprintf(yycom, "COMANDO ATRIBUICAO");
+            fprintf(yycom, "%s = COMANDO ATRIBUICAO", node->nome);
         fprintf(yyout, "%s = ", node->nome);
         break;
     case POSINC:
