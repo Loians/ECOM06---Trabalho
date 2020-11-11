@@ -18,7 +18,8 @@ begin
         if(b>3){
             a--;
         }
-    }else{
+    }
+    else{
         c++;
     }
     lpout("\nA = ", a, "\nB = ", b, "\nC = ", c, "\n");

@@ -108,9 +108,6 @@ sentenca:
     }
     | incdecfim {
         $$ = $1;
-    }
-    | {
-        $$ = NULL; 
     };
 
 sentencas:
@@ -122,6 +119,9 @@ sentencas:
         $$->esq = $1; 
         $$->dir = $2;
         $$->token = -1;
+    }
+    | {
+        $$ = NULL; 
     };
 
 
@@ -457,8 +457,6 @@ int main(int argc, char *argv[])
     yytok = fopen(strcat(entrada,"-tokens.txt"),"w");
     yycom = fopen(strcat(entrada2,"-comandos.txt"),"w");
 
-    fprintf(yycom, "\n\n\n\t");
-
     printf("\n");
     yyparse();
     if(!erro){
@@ -466,15 +464,19 @@ int main(int argc, char *argv[])
     }   
     fprintf(yyout,"#include <iostream>\n\n");
     fprintf(yyout,"int main(){\n\t");
+    fprintf(yycom,"\n\nInicio do programa\n\t");
 
     imprime(raiz);
 
     fprintf(yyout,"\n\treturn 0;\n}\n");
+    fprintf(yycom,"\n\nFim do programa");
+
     fclose(yyin);
     fclose(yyout);
     fclose(yytok);
     fclose(yycom);
     fclose(stderr);
+
     if(!erro){
         system("g++ lupe.cpp -o out.exe && out");
     }

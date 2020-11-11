@@ -11,7 +11,6 @@ extern int erro;
 node *raiz;
 listaVars *prim = NULL;
 int cont = 1;
-char tofor = 0;
 
 void imprimetab(int i)
 {
@@ -51,15 +50,15 @@ void imprimecaso(int caso)
         fprintf(yyout, " / ");
         break;
     case T_INT:
-        fprintf(yycom, "NOVA VARIAVEL INT");
+        fprintf(yycom, "inteira; ");
         fprintf(yyout, "int");
         break;
     case T_CHAR:
-        fprintf(yycom, "NOVA VARIAVEL CHAR");
+        fprintf(yycom, "char; ");
         fprintf(yyout, "char");
         break;
     case T_REAL:
-        fprintf(yycom, "NOVA VARIAVEL REAL");
+        fprintf(yycom, "real; ");
         fprintf(yyout, "float");
         break;
     case IGUAL:
@@ -116,6 +115,7 @@ void imprime(node *node)
         fprintf(yyout, "%f", node->valor.real);
         break;
     case MOD:
+        fprintf(yycom, "Operacao mod; ");
         fprintf(yyout, " %% ");
         break;
     case EXPPARS:
@@ -124,28 +124,27 @@ void imprime(node *node)
         fprintf(yyout, ")");
         break;
     case EXPOPS:
+        fprintf(yycom, "Operacao aritimetica; ");
         imprimecaso(node->caso);
         break;
     case EXPSUB:
         fprintf(yyout, "-");
         break;
     case NOVAVAR:
+        fprintf(yycom, "%s => Declaracao de variavel ", node->nome);
         imprimecaso(node->caso);
         fprintf(yyout, " %s;", node->nome);
         break;
     case ATRIBUIR:
-        if (!tofor)
-            fprintf(yycom, "%s = COMANDO ATRIBUICAO", node->nome);
+        fprintf(yycom, "%s => Comando de atribuicao; ", node->nome);
         fprintf(yyout, "%s = ", node->nome);
         break;
     case POSINC:
-        if (!tofor)
-            fprintf(yycom, "COMANDO POSINC");
+        fprintf(yycom, "%s => Comando de incremento; ", node->nome);
         fprintf(yyout, "%s++", node->nome);
         break;
     case POSDEC:
-        if (!tofor)
-            fprintf(yycom, "COMANDO POSDEC");
+        fprintf(yycom, "%s => Comando de decremento; ", node->nome);
         fprintf(yyout, "%s--", node->nome);
         break;
     case ADDFIM:
@@ -155,29 +154,32 @@ void imprime(node *node)
         fprintf(yyout, " << ");
         break;
     case SAIDA:
-        fprintf(yycom, "SAIDA DE DADOS");
+        fprintf(yycom, "lpout => Saida de dados;");
         fprintf(yyout, "std::cout << ");
         imprime(node->afrente);
         fprintf(yyout, ";");
         break;
     case ENTRADA:
-        fprintf(yycom, "ENTRADA DE DADOS");
+        fprintf(yycom, "lpin => Entrada de dados;");
         fprintf(yyout, "std::cin >> %s;", node->nome);
         break;
     case PALAVRA:
         fprintf(yyout, "%s", node->nome);
         break;
     case NOTVAR:
+        fprintf(yycom, "Operacao logica; ");
         fprintf(yyout, "!");
         break;
     case OPCOMP:
+        fprintf(yycom, "Operacao relacional; ");
         imprimecaso(node->caso);
         break;
     case OPLOGICA:
+        fprintf(yycom, "Operacao logica; ");
         imprimecaso(node->caso);
         break;
     case IF:
-        fprintf(yycom, "COMANDO CONDICIONAL");
+        fprintf(yycom, "Comando condicional: ");
         fprintf(yyout, "if( ");
         imprime(node->afrente);
         fprintf(yyout, " ){");
@@ -188,7 +190,7 @@ void imprime(node *node)
         break;
     case ELSE:
         imprimetab(0);
-        fprintf(yycom, "COMANDO CONDICIONAL COMPLEMENTAR");
+        fprintf(yycom, "Comando condicional else ");
         fprintf(yyout, "else{");
         imprimetab(1);
         imprime(node->afrente);
@@ -196,22 +198,20 @@ void imprime(node *node)
         fprintf(yyout, "}");
         break;
     case FOR:
-        tofor = 1;
-        fprintf(yycom, "COMANDO DE REPETICAO FOR");
+        fprintf(yycom, "Comando de repeticao for: ");
         fprintf(yyout, "for(");
         imprime(node->afrente);
         imprime(node->afrente1);
         fprintf(yyout, ";");
         imprime(node->afrente2);
         fprintf(yyout, "){");
-        tofor = 0;
         imprimetab(1);
         imprime(node->afrente3);
         imprimetab(2);
         fprintf(yyout, "}");
         break;
     case WHILE:
-        fprintf(yycom, "COMANDO DE REPETICAO WHILE");
+        fprintf(yycom, "Comando de repeticao while: ");
         fprintf(yyout, "while( ");
         imprime(node->afrente);
         fprintf(yyout, " ){");
