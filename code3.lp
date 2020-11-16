@@ -21,7 +21,5 @@ begin
         }
         lpout("\nDigite s para sair ");
         lpin(opcao);
-        
-        
     }
 end

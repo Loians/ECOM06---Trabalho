@@ -455,15 +455,17 @@ int main(int argc, char *argv[])
     yyparse();
     if(!erro){
         fprintf(stderr, "Analisado com sucesso!\n"); 
-    }   
-    fprintf(yyout,"#include <iostream>\n\n");
-    fprintf(yyout,"int main(){\n\t");
-    fprintf(yycom,"\n\nInicio do programa\n\t");
+        fprintf(yyout,"#include <iostream>\n\n");
+        fprintf(yyout,"int main(){\n\t");
+        fprintf(yycom,"\n\nInicio do programa\n\t");
 
-    imprime(raiz);
+        imprime(raiz);
 
-    fprintf(yyout,"\n\treturn 0;\n}\n");
-    fprintf(yycom,"\n\nFim do programa");
+        fprintf(yyout,"\n\treturn 0;\n}\n");
+        fprintf(yycom,"\n\nFim do programa");
+    }else{
+        fprintf(yyout,"Problema no arquivo de entrada!");
+    }
 
     fclose(yyin);
     fclose(yyout);
