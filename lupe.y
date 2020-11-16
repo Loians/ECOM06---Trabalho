@@ -74,7 +74,7 @@
 
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
 %type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
-%type <nos> condifelse opcomp varlogica opLogicas
+%type <nos> condifelse /*opcomp varlogica*/ opLogicas
 %type <nos> posinc posdec incdec incdecfim dados
 %type <tipoint> operacoes tipos operadorL relacional
 
@@ -328,14 +328,7 @@ operadorL:
     | OR {
         $$ = OR;
     };
-varlogica:
-    expressaoA{
-        $$ = $1;
-    }
-    | opcomp{
-        $$ = $1;
-    }
-    ;
+
 relacional:
     IGUAL {
         $$ = IGUAL;
@@ -355,18 +348,17 @@ relacional:
     | DIFERENTE {
         $$ = DIFERENTE;
     };
-opcomp:
-    expressaoA relacional expressaoA {
+
+opLogicas:
+    expressaoA{
+        $$ = $1;
+    }
+    | expressaoA relacional expressaoA{
         $$ = (node*)malloc(sizeof(node));
         $$->caso = $2;
         $$->token = OPCOMP;
         $$->esq = $1;
         $$->dir = $3;
-    };
-    
-opLogicas:
-    varlogica{
-        $$ = $1;
     }
     | NOT opLogicas{
         $$ = (node*)malloc(sizeof(node));
