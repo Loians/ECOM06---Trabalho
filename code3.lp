@@ -17,7 +17,7 @@ begin
                 x1 = x1 + x2;
                 x2 = x1 - x2;
             }
-            lpout("O ",n,"o termo e: ",x1);
+            lpout("O ",n,"o termo de Fibonacci e: ",x1);
         }
         lpout("\nDigite s para sair ");
         lpin(opcao);

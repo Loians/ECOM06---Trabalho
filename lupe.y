@@ -74,7 +74,7 @@
 
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
 %type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
-%type <nos> condifelse /*opcomp varlogica*/ opLogicas
+%type <nos> condifelse opLogicas
 %type <nos> posinc posdec incdec incdecfim dados
 %type <tipoint> operacoes tipos operadorL relacional
 
@@ -439,12 +439,13 @@ loopwhile:
 int main(int argc, char *argv[])
 {
     char *entrada , *entrada2;
-    entrada  = strdup(argv[1]);
-    entrada2 = strdup(argv[1]);
-    if(argc == 1){
+    if(argc != 2){
         printf("Eh necessario um codigo lupe");
         return 1;
     }
+    entrada  = strdup(argv[1]);
+    entrada2 = strdup(argv[1]);
+    
     yyin = fopen(argv[1],"r");
     
     yyout = fopen("lupe.cpp","w");
