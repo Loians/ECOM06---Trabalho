@@ -6,7 +6,7 @@ begin
         lpout("Digite n: ");
         lpin(n);
         if(n<1){
-            lpout(0);
+            lpout("Entrada invalida\n");
         }else{
             int x1;
             int x2;
