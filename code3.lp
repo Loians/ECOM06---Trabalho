@@ -3,7 +3,7 @@ begin
     int n;
     opcao = 'n';
     while(opcao != 's'){
-        lpout("Digite n: ");
+        lpout("\nDigite n: ");
         lpin(n);
         if(n<1){
             lpout("Entrada invalida\n");
@@ -18,9 +18,10 @@ begin
                 x2 = x1 - x2;
             }
             lpout("O ",n,"o termo e: ",x1);
-            lpout("\nDigite s para sair\n");
-            lpin(opcao);
         }
+        lpout("\nDigite s para sair ");
+        lpin(opcao);
+        
         
     }
 end

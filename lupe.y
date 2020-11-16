@@ -329,13 +329,7 @@ operadorL:
         $$ = OR;
     };
 varlogica:
-    NOT expressaoA {
-        $$ = (node*)malloc(sizeof(node));
-        $$->token = NOTVAR;
-        $$->esq = NULL;
-        $$->dir = $2;
-    }
-    | expressaoA{
+    expressaoA{
         $$ = $1;
     }
     | opcomp{
@@ -369,9 +363,17 @@ opcomp:
         $$->esq = $1;
         $$->dir = $3;
     };
+    
 opLogicas:
     varlogica{
         $$ = $1;
+    }
+    | NOT opLogicas{
+        $$ = (node*)malloc(sizeof(node));
+        $$->afrente = $2;
+        $$->token = NOTVAR;
+        $$->esq = NULL;
+        $$->dir = $2;
     }
     | opLogicas operadorL opLogicas {
         $$ = (node*)malloc(sizeof(node));
@@ -475,7 +477,7 @@ int main(int argc, char *argv[])
     fclose(yyout);
     fclose(yytok);
     fclose(yycom);
-    fclose(stderr);
+    fflush(stderr);
 
     if(!erro){
         system("g++ lupe.cpp -o out.exe && out");

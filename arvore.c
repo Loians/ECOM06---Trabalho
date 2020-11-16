@@ -167,7 +167,7 @@ void imprime(node *node)
         fprintf(yyout, "%s", node->nome);
         break;
     case NOTVAR:
-        fprintf(yycom, "Operacao logica; ");
+        fprintf(yycom, "Operacao negacao; ");
         fprintf(yyout, "!");
         break;
     case OPCOMP:
