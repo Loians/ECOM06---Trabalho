@@ -160,7 +160,7 @@ void imprime(node *node)
         fprintf(yyout, ";");
         break;
     case ENTRADA:
-        fprintf(yycom, "lpin => Entrada de dados;");
+        fprintf(yycom, "lpin => Leitura do valor para variavel %s;", node->nome);
         fprintf(yyout, "std::cin >> %s;", node->nome);
         break;
     case PALAVRA:
