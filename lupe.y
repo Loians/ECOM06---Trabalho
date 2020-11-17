@@ -475,7 +475,11 @@ int main(int argc, char *argv[])
     fflush(stderr);
 
     if(!erro){
+        #ifdef WIN32
         system("g++ lupe.cpp -o out.exe && out");
+        #else
+        system("g++ lupe.cpp -o out && ./out");
+        #endif
     }
     return 0;
 }
