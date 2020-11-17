@@ -75,7 +75,7 @@
 %type <nos> sentenca sentencas valor varint opmod expressaoA novavar 
 %type <nos> atribuir atribuirfim escrever ler loopfor loopwhile condif 
 %type <nos> condifelse opLogicas
-%type <nos> posinc posdec incdec incdecfim dados
+%type <nos> incdec incdecfim dados
 %type <tipoint> operacoes tipos operadorL relacional
 
 %start inicio
@@ -248,7 +248,7 @@ atribuirfim:
         $$->dir = NULL;
     };
 
-posinc:
+incdec:
     VARIAVEL SOMA SOMA{
         $$ = (node*)malloc(sizeof(node));
         $$->token = POSINC;
@@ -256,24 +256,15 @@ posinc:
         buscaLista(yylval.var);
         $$->esq = NULL;
         $$->dir = NULL;
-    };
-posdec:
-    VARIAVEL SUB SUB{
+    }
+    | VARIAVEL SUB SUB{
         $$ = (node*)malloc(sizeof(node));
         $$->token = POSDEC;
         $$->nome = yylval.var;
         buscaLista(yylval.var);
         $$->esq = NULL;
         $$->dir = NULL;
-    };
-
-incdec:
-    posinc{
-        $$ = $1;
-    }
-    | posdec{
-        $$ = $1;
-    };   
+    };  
 
 incdecfim:
     incdec PTVIRGULA{
