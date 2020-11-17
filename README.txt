@@ -2,5 +2,5 @@ Para Windows, utilizou-se da ferramenta GIT SDK para fazer a compilação e exec
 
 No terminal GIT SDK ou no terminal do Linux, basta dar o comando "make" dentro do diretório do projeto.
 
-Assim que a execução desse comando terminar é necessário, para a execução de um arquivo, utilizar o comando: "./lupe.exe arquivo.lp".
+Assim que a execução desse comando terminarm é necessário, para a execução de um arquivo, utilizar o comando: "./lupe.exe arquivo.lp".
 Substitua o "arquivo.lp" pelo arquivo do código, por exemplo: "./lupe.exe code1.lp".
